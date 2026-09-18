@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartScan | Product Label Inspection & Compliance Analysis</title>
+  <meta name="description" content="Detailed Legal Metrology statutory compliance analysis report, OCR extraction breakdown, and violation findings.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔍</text></svg>">
+</head>
+<body>
+
+  <!-- Top Official Ministry Bar -->
+  <header class="gov-bar">
+    <div class="container gov-bar-content">
+      <div class="gov-emblem-text">
+        <span>🏛️</span>
+        <span>Government of India &bull; <strong>Ministry of Consumer Affairs, Food & Public Distribution</strong></span>
+        <span class="gov-badge">Statutory Inspection View</span>
+      </div>
+      <div class="gov-bar-links">
+        <a href="index.html">← Back to Scanner</a>
+        <a href="complaints.html">State Officers Directory</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M3 7V5a2 2 0 0 1 2-2h2"/>
+            <path d="M17 3h2a2 2 0 0 1 2 2v2"/>
+            <path d="M21 17v2a2 2 0 0 1-2 2h-2"/>
+            <path d="M7 21H5a2 2 0 0 1-2-2v-2"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+        </div>
+        <div class="brand-title">
+          <div class="brand-name">Smart<span>Scan</span></div>
+          <div class="brand-subtitle">Inspection Analysis</div>
+        </div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home (Scan)</a></li>
+        <li><a href="scan.html" class="nav-link active">Inspection Report</a></li>
+        <li><a href="complaints.html" class="nav-link">State Complaints Portal</a></li>
+        <li><a href="history.html" class="nav-link">Product Repository</a></li>
+        <li><a href="dashboard.html" class="nav-link">Enforcement Dashboard</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="btn btn-outline btn-sm" id="btnPrintReportTop" onclick="window.ReportGenerator.printReport()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+          <span>Print / PDF Report</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="analysis-container">
+    <div class="container">
+      
+      <!-- Inspection Title Header Bar -->
+      <div class="analysis-header-bar">
+        <div class="analysis-title-group">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+            <span class="badge badge-info" id="badgeInspectionId">LM-INSP-LOADING</span>
+            <span style="font-size: 0.85rem; color: #64748B;" id="textInspectionDate">Date: Synchronizing...</span>
+          </div>
+          <h1 id="headingProductName">Product Label Compliance Assessment</h1>
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+          <a href="index.html" class="btn btn-outline btn-sm">
+            <span>↺ Scan Another Product</span>
+          </a>
+          <a href="complaints.html" class="btn btn-accent btn-sm" id="btnForwardComplaint">
+            <span>⚖️ File State Complaint</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Split Layout: Left Label Preview & OCR / Right Verification Matrix -->
+      <div class="analysis-grid">
+        
+        <!-- Left: Image Preview & OCR Data -->
+        <div style="display: flex; flex-direction: column; gap: var(--space-6);">
+          
+          <div class="image-preview-card">
+            <div class="image-preview-header">
+              <span>Scanned Packaging Label Evidence</span>
+              <span class="badge badge-info" id="labelPreviewBadge">High-Resolution OCR</span>
+            </div>
+
+            <div class="image-display-frame" id="imageDisplayFrame">
+              <img id="scannedImagePreview" src="" alt="Scanned Product Label">
+              <div class="bounding-box-overlay" id="boundingBoxOverlay"></div>
+            </div>
+
+            <div class="image-preview-footer">
+              <span>Location: <strong id="previewStoreName">Indiranagar Superstore</strong> (<span id="previewState">Karnataka</span>)</span>
+              <span>OCR Engine: <strong>LegalMetrology-v2.6</strong></span>
+            </div>
+          </div>
+
+          <!-- Extracted OCR Text Box -->
+          <div class="checklist-card">
+            <div class="checklist-header">
+              <h3>Extracted Label Text (Raw OCR)</h3>
+              <button class="btn btn-outline btn-sm" id="btnCopyOcr" style="padding: 4px 10px; font-size: 0.75rem;">
+                Copy Text
+              </button>
+            </div>
+            <div style="padding: var(--space-4); background: #0F172A; color: #E2E8F0; font-family: monospace; font-size: 0.825rem; white-space: pre-wrap; max-height: 200px; overflow-y: auto;" id="rawOcrTextDisplay">
+              Reading label declarations...
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: Compliance Verdict & Checklist -->
+        <div class="results-card">
+          
+          <!-- Verdict Banner -->
+          <div class="verdict-banner" id="verdictBanner">
+            <div class="verdict-left">
+              <div class="verdict-icon" id="verdictIcon">✓</div>
+              <div class="verdict-text">
+                <h2 id="verdictHeading">COMPLIANT WITH PCR, 2011</h2>
+                <p id="verdictDescription">All mandatory statutory declarations were verified on this packaging label.</p>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 2rem; font-weight: 800;" id="verdictScore">100%</div>
+              <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #475569;">Compliance Score</div>
+            </div>
+          </div>
+
+          <!-- Detailed Statutory Declarations Checklist -->
+          <div class="checklist-card">
+            <div class="checklist-header">
+              <div>
+                <h3>Mandatory Declarations Checklist</h3>
+                <p style="font-size: 0.8rem; color: #64748B;">Evaluated under Rule 6, Legal Metrology (Packaged Commodities) Rules, 2011</p>
+              </div>
+              <span class="badge" id="badgeTotalViolations">0 Violations</span>
+            </div>
+
+            <div class="rules-list" id="rulesListContainer">
+              <!-- Dynamically populated by JS -->
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Official Printable Report Section -->
+      <div style="margin-top: var(--space-12);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+          <div>
+            <h2 style="font-size: 1.4rem; color: var(--color-primary-dark); font-weight: 800;">Official Inspection Document</h2>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">Statutory documentation formatted for enforcement notice issuing and court evidence submission.</p>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="window.ReportGenerator.printReport()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Download Official PDF / Print</span>
+          </button>
+        </div>
+
+        <div id="officialReportContainer">
+          <!-- Rendered by ReportGenerator -->
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <div>SmartScan &bull; Legal Metrology Division &bull; Ministry of Consumer Affairs, Govt. of India</div>
+        <div>Statutory Verification under Act No. 1 of 2010</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/ruleEngine.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/reportGenerator.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Retrieve active scan from session or fall back to most recent inspection
+      let scanData = window.SmartScanApp.getActiveScan();
+
+      if (!scanData) {
+        const inspections = window.SmartScanApp.getInspections();
+        if (inspections && inspections.length > 0) {
+          const latest = inspections[0];
+          // Re-evaluate
+          scanData = {
+            inspectionId: latest.id,
+            productName: latest.productName,
+            brand: latest.brand,
+            category: latest.category,
+            storeName: latest.storeName,
+            state: latest.state,
+            image: latest.image,
+            ocrText: `
+${latest.productName}
+Net Qty: ${latest.netQty || '200 g'}
+Mfg Date: ${latest.mfgDate || '08/2026'}
+MRP: ${latest.mrp || '₹40.00 (incl. of all taxes)'}
+Packed by: ${latest.brand}, Industrial Estate
+Consumer Care: 1800-200-1122, support@consumer.in
+Country of Origin: India
+            `.trim()
+          };
+          const evalResult = window.LegalMetrologyEngine.evaluateCompliance(scanData.ocrText);
+          scanData = { ...scanData, ...evalResult };
+        }
+      }
+
+      if (!scanData) {
+        alert('No scan data available. Please scan a product first.');
+        window.location.href = 'index.html';
+        return;
+      }
+
+      // Populate Top Meta
+      document.getElementById('badgeInspectionId').textContent = scanData.inspectionId;
+      document.getElementById('textInspectionDate').textContent = `Inspection Date: ${scanData.scanTimestamp || new Date().toLocaleDateString('en-IN')}`;
+      document.getElementById('headingProductName').textContent = scanData.productName;
+      document.getElementById('previewStoreName').textContent = scanData.storeName || 'Field Retail Sample';
+      document.getElementById('previewState').textContent = scanData.state || 'Karnataka';
+      document.getElementById('rawOcrTextDisplay').textContent = scanData.ocrText || 'No text extracted.';
+
+      // Sample image generator or provided image
+      const imgElem = document.getElementById('scannedImagePreview');
+      if (scanData.image && scanData.image.startsWith('data:image')) {
+        imgElem.src = scanData.image;
+      } else {
+        // High fidelity SVG packet representation
+        imgElem.src = generatePacketSvg(scanData);
+      }
+
+      // Populate Verdict Banner
+      const verdictBanner = document.getElementById('verdictBanner');
+      const verdictIcon = document.getElementById('verdictIcon');
+      const verdictHeading = document.getElementById('verdictHeading');
+      const verdictDesc = document.getElementById('verdictDescription');
+      const verdictScore = document.getElementById('verdictScore');
+      const badgeViolations = document.getElementById('badgeTotalViolations');
+
+      if (scanData.isCompliant) {
+        verdictBanner.className = 'verdict-banner compliant';
+        verdictIcon.textContent = '✓';
+        verdictHeading.textContent = 'COMPLIANT WITH PCR, 2011';
+        verdictDesc.textContent = 'All statutory mandatory declarations were verified and meet legal standards.';
+        badgeViolations.className = 'badge badge-compliant';
+        badgeViolations.textContent = '0 Violations (Fully Compliant)';
+      } else {
+        verdictBanner.className = 'verdict-banner non-compliant';
+        verdictIcon.textContent = '⚠️';
+        verdictHeading.textContent = 'NON-COMPLIANT PACKAGED COMMODITY';
+        verdictDesc.textContent = `${scanData.violationsCount} mandatory declarations violated under PCR, 2011. Notice recommended.`;
+        badgeViolations.className = 'badge badge-non-compliant';
+        badgeViolations.textContent = `${scanData.violationsCount} Violations Detected`;
+      }
+      verdictScore.textContent = `${scanData.complianceScore}%`;
+
+      // Render Checklist
+      const listContainer = document.getElementById('rulesListContainer');
+      listContainer.innerHTML = (scanData.rules || []).map(rule => `
+        <div class="rule-item">
+          <div class="rule-left">
+            <div class="rule-indicator ${rule.passed ? 'pass' : 'fail'}">
+              ${rule.passed ? '✓' : '✕'}
+            </div>
+            <div class="rule-info">
+              <span class="rule-code">${rule.ruleCode}</span>
+              <span class="rule-title">${rule.ruleName}</span>
+              <span style="font-size: 0.8rem; color: #64748B;">${rule.description}</span>
+              <div class="rule-detected-val">
+                <strong>Extracted:</strong> ${escapeHtml(rule.detectedText || 'N/A')}
+              </div>
+              <div style="font-size: 0.775rem; margin-top: 4px; color: ${rule.passed ? '#0A8754' : '#C62828'}; font-weight: 500;">
+                ${rule.remarks}
+              </div>
+            </div>
+          </div>
+          <div class="rule-right">
+            <span class="badge ${rule.passed ? 'badge-compliant' : 'badge-non-compliant'}">
+              ${rule.passed ? 'PASS' : 'VIOLATION'}
+            </span>
+          </div>
+        </div>
+      `).join('');
+
+      // Render Official Legal Report
+      window.ReportGenerator.renderReport(scanData, 'officialReportContainer');
+
+      // Copy OCR handler
+      document.getElementById('btnCopyOcr').addEventListener('click', () => {
+        navigator.clipboard.writeText(scanData.ocrText || '');
+        window.SmartScanApp.showToast('Raw OCR text copied to clipboard!', 'success');
+      });
+    });
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return text.toString().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function generatePacketSvg(scan) {
+      const isOk = scan.isCompliant;
+      const title = scan.productName || 'Packaged Commodity';
+      const mrp = (scan.rules && scan.rules.find(r => r.id === 'rule_mrp')?.detectedText) || '₹50.00';
+      const net = (scan.rules && scan.rules.find(r => r.id === 'rule_net_qty')?.detectedText) || '200 g';
+
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="380" height="420" viewBox="0 0 380 420">
+          <defs>
+            <linearGradient id="pGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#0F2D59"/>
+              <stop offset="100%" stop-color="#1E4680"/>
+            </linearGradient>
+          </defs>
+          <rect width="380" height="420" fill="#F1F5F9"/>
+          <rect x="30" y="20" width="320" height="380" rx="12" fill="url(#pGrad)" stroke="${isOk ? '#00E676' : '#FF1744'}" stroke-width="4"/>
+          
+          <rect x="50" y="40" width="280" height="60" rx="6" fill="#FFFFFF" opacity="0.95"/>
+          <text x="190" y="65" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#0F2D59" text-anchor="middle">${title.slice(0, 30)}</text>
+          <text x="190" y="85" font-family="Arial, sans-serif" font-size="11" fill="#E65100" font-weight="bold" text-anchor="middle">LEGAL METROLOGY INSPECTION SAMPLE</text>
+          
+          <!-- Back Declaration Panel -->
+          <rect x="50" y="120" width="280" height="230" rx="6" fill="#FFFFFF"/>
+          <text x="65" y="145" font-family="monospace" font-size="11" font-weight="bold" fill="#0F172A">STATUTORY DECLARATIONS:</text>
+          <line x1="65" y1="152" x2="315" y2="152" stroke="#CBD5E1" stroke-width="1"/>
+          
+          <text x="65" y="172" font-family="monospace" font-size="10" fill="#334155">${mrp.slice(0, 32)}</text>
+          <text x="65" y="192" font-family="monospace" font-size="10" fill="#334155">${net.slice(0, 32)}</text>
+          <text x="65" y="212" font-family="monospace" font-size="10" fill="#334155">Mfg Dt: 08/2026 Batch: 902</text>
+          <text x="65" y="232" font-family="monospace" font-size="9" fill="#334155">Packed by: ${scan.brand || 'Enterprise Ltd'}</text>
+          <text x="65" y="252" font-family="monospace" font-size="9" fill="${isOk ? '#0A8754' : '#C62828'}">${isOk ? 'Helpline: 1800-425-4449' : '[CONSUMER CARE MISSING]'}</text>
+          <text x="65" y="272" font-family="monospace" font-size="9" fill="#334155">Country of Origin: ${isOk ? 'India' : 'NOT DECLARED'}</text>
+          
+          <!-- Verification Stamp -->
+          <circle cx="280" cy="305" r="30" fill="none" stroke="${isOk ? '#0A8754' : '#C62828'}" stroke-width="2" stroke-dasharray="3,2"/>
+          <text x="280" y="305" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="${isOk ? '#0A8754' : '#C62828'}" text-anchor="middle">${isOk ? 'PCR 2011' : 'VIOLATION'}</text>
+          <text x="280" y="318" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="${isOk ? '#0A8754' : '#C62828'}" text-anchor="middle">${isOk ? 'PASSED' : 'FLAGGED'}</text>
+        </svg>
+      `;
+      return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+    }
+  </script>
+
+</body>
+</html>

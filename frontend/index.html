@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartScan | Legal Metrology Automated Compliance & Violation Reporting System</title>
+  <meta name="description" content="AI-powered Legal Metrology (Packaged Commodities) Rules 2011 compliance verification, OCR label extraction, and State Enforcement Officer complaint reporting system.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔍</text></svg>">
+</head>
+<body>
+
+  <!-- Top Official Ministry Header -->
+  <header class="gov-bar" role="banner">
+    <div class="container gov-bar-content">
+      <div class="gov-emblem-text">
+        <span style="font-size: 1.1rem;">🏛️</span>
+        <span>Government of India &bull; <strong>Ministry of Consumer Affairs, Food and Public Distribution</strong></span>
+        <span class="gov-badge">Legal Metrology Division</span>
+      </div>
+      <div class="gov-bar-links">
+        <a href="#about-ministry">About Legal Metrology Act, 2009</a>
+        <a href="complaints.html">State Officers Directory</a>
+        <a href="#contact">Consumer Helpline: 1915</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Navigation Bar -->
+  <nav class="navbar" role="navigation" aria-label="Main Navigation">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo" id="brandLogoLink">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 7V5a2 2 0 0 1 2-2h2"/>
+            <path d="M17 3h2a2 2 0 0 1 2 2v2"/>
+            <path d="M21 17v2a2 2 0 0 1-2 2h-2"/>
+            <path d="M7 21H5a2 2 0 0 1-2-2v-2"/>
+            <circle cx="12" cy="12" r="3"/>
+            <path d="m16 16 3 3"/>
+          </svg>
+        </div>
+        <div class="brand-title">
+          <div class="brand-name">Smart<span>Scan</span></div>
+          <div class="brand-subtitle">Legal Metrology Compliance</div>
+        </div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link active" id="navHome">Home (Scan)</a></li>
+        <li><a href="scan.html" class="nav-link" id="navAnalysis">Inspection Report</a></li>
+        <li><a href="complaints.html" class="nav-link" id="navComplaints">State Complaints Portal</a></li>
+        <li><a href="history.html" class="nav-link" id="navHistory">Product Repository</a></li>
+        <li><a href="dashboard.html" class="nav-link" id="navDashboard">Enforcement Dashboard</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="complaints.html" class="btn btn-accent btn-sm" id="navLodgeComplaintBtn">
+          <span>Lodge State Grievance</span>
+          <span>→</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Hero Section: Clean, Attractive, Focused on Scanning -->
+    <section class="hero-section" id="scanner">
+      <div class="container hero-grid">
+        
+        <!-- Left: Hero Text & Information -->
+        <div class="hero-content">
+          <div class="hero-pill">
+            <span class="hero-pill-icon"></span>
+            <span>SIH 2026 &bull; Automated Packaged Commodities Verification</span>
+          </div>
+
+          <h1 class="hero-title">
+            Verify Packaged Commodity <span class="highlight">Legal Compliance</span> in Seconds.
+          </h1>
+
+          <p class="hero-description">
+            Scan any retail packet label to automatically detect mandatory declarations under the 
+            <strong>Legal Metrology (Packaged Commodities) Rules, 2011</strong>. Instantly identify missing MRPs, 
+            absent consumer care numbers, illegal units, and forward violations to State Enforcement Officers.
+          </p>
+
+          <div class="hero-key-rules">
+            <span class="rule-tag">✓ Rule 6(1)(e) MRP & Unit Sale Price</span>
+            <span class="rule-tag">✓ Rule 6(1)(c) Net Quantity (SI Units)</span>
+            <span class="rule-tag">✓ Rule 6(1)(f) Consumer Care Helpline</span>
+            <span class="rule-tag">✓ Rule 6(1)(d) Mfg / Packing Date</span>
+            <span class="rule-tag">✓ Rule 6(1)(g) Country of Origin</span>
+          </div>
+        </div>
+
+        <!-- Right: The Hero Scanner Widget -->
+        <div class="scanner-widget" id="scannerWidgetCard">
+          
+          <div class="scanner-widget-header">
+            <div class="scanner-widget-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <rect width="18" height="18" x="3" y="3" rx="2"/>
+                <path d="M7 7h.01"/>
+                <path d="M17 7h.01"/>
+                <path d="M7 17h.01"/>
+                <path d="M17 17h.01"/>
+              </svg>
+              <span>Instant Label Scanner</span>
+            </div>
+            <span class="badge badge-info">Live OCR & AI</span>
+          </div>
+
+          <!-- Drag and Drop Dropzone -->
+          <div class="dropzone" id="scannerDropzone" role="button" tabindex="0" aria-label="Upload package label image">
+            <input type="file" id="productImageInput" class="dropzone-input" accept="image/*">
+            
+            <div class="dropzone-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+            </div>
+
+            <div class="dropzone-title">Drop Product Label Image Here</div>
+            <div class="dropzone-subtitle">or click to browse from device (JPG, PNG, WebP)</div>
+          </div>
+
+          <!-- Quick Demo Sample Packets (1-Click Evaluation for Hackathon Presentation) -->
+          <div class="demo-samples-wrapper">
+            <div class="demo-samples-label">
+              <span>⚡ Try Pre-loaded Hackathon Test Samples:</span>
+            </div>
+            <div class="sample-pills">
+              <button class="sample-pill-btn" data-sample-id="sample_compliant" id="btnSampleCompliant" title="Valid Biscuit packet meeting all 7 rules">
+                <span class="sample-dot compliant"></span>
+                <span>🍪 Britannia Biscuit (Compliant)</span>
+              </button>
+              
+              <button class="sample-pill-btn" data-sample-id="sample_missing_care" id="btnSampleMissingCare" title="Masala packet missing consumer care email and phone number">
+                <span class="sample-dot non-compliant"></span>
+                <span>🌶️ Masala (Missing Consumer Care)</span>
+              </button>
+
+              <button class="sample-pill-btn" data-sample-id="sample_imported" id="btnSampleImported" title="Imported chocolate missing Country of Origin and INR price">
+                <span class="sample-dot non-compliant"></span>
+                <span>🍫 Imported (Missing Origin & INR)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Active Scanning Overlay with Laser Beam Animation -->
+          <div class="scanning-overlay" id="scanningOverlay">
+            <div class="laser-scanner-box">
+              <div class="laser-beam"></div>
+              <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5">
+                <path d="M4 7V4h3"/>
+                <path d="M17 4h3v3"/>
+                <path d="M20 17v3h-3"/>
+                <path d="M7 20H4v-3"/>
+                <line x1="8" y1="12" x2="16" y2="12"/>
+              </svg>
+            </div>
+            <div class="scanning-status-text" id="scanningStatusText">Reading Label Details...</div>
+            <div class="scanning-substatus" id="scanningSubstatus">Optical Character Recognition in progress...</div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Live National Impact Stats Bar -->
+    <section class="impact-stats-section" aria-label="National Enforcement Impact Statistics">
+      <div class="container">
+        <div class="stats-card">
+          <div class="stat-item">
+            <div class="stat-value" id="statTotalScans">48,294</div>
+            <div class="stat-label">Packaged Products Scanned</div>
+            <div class="stat-desc">Across retail & e-commerce channels</div>
+          </div>
+
+          <div class="stat-item">
+            <div class="stat-value accent" id="statViolations">14,122</div>
+            <div class="stat-label">Violations Detected</div>
+            <div class="stat-desc">Under Legal Metrology PCR, 2011</div>
+          </div>
+
+          <div class="stat-item">
+            <div class="stat-value" id="statComplaints">9,842</div>
+            <div class="stat-label">Transmitted to State Officers</div>
+            <div class="stat-desc">For formal compounding notices</div>
+          </div>
+
+          <div class="stat-item">
+            <div class="stat-value success" id="statResolved">8,917</div>
+            <div class="stat-label">Complaints Resolved (90.6%)</div>
+            <div class="stat-desc">By State Controllers & Controllers</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Clean Ministry & Legal Metrology Act Overview Section -->
+    <section class="info-section" id="about-ministry">
+      <div class="container">
+        
+        <div class="section-header">
+          <span class="section-badge">Statutory Framework</span>
+          <h2 class="section-title">Ministry of Consumer Affairs & Legal Metrology</h2>
+          <p class="section-subtitle">
+            Ensuring fair trade practices, mandatory consumer transparency, and standard measurements across all 28 States and 8 Union Territories of India.
+          </p>
+        </div>
+
+        <div class="features-grid">
+          
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              ⚖️
+            </div>
+            <h3 class="feature-title">The Legal Metrology Act, 2009</h3>
+            <p class="feature-text">
+              Act No. 1 of 2010 mandates that every pre-packaged commodity sold in Indian retail or e-commerce must declare standard weight, clear MRP, and manufacturer origin to protect buyers from fraud.
+            </p>
+          </div>
+
+          <div class="feature-card accent">
+            <div class="feature-icon-wrapper">
+              🛡️
+            </div>
+            <h3 class="feature-title">Packaged Commodities Rules (PCR), 2011</h3>
+            <p class="feature-text">
+              Enacted under Section 52(2), Rule 6 defines 7 non-negotiable declarations including unit sale price, date of manufacture, and a functional consumer care cell with phone and email.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              🏛️
+            </div>
+            <h3 class="feature-title">State Enforcement Officers</h3>
+            <p class="feature-text">
+              Each state has an authorized Controller and Assistant Controllers of Legal Metrology empowered to seize non-compliant goods, issue notices, and levy compounding penalties under Section 36.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4-Step How It Works Flow -->
+    <section class="how-it-works-section">
+      <div class="container">
+        
+        <div class="section-header" style="margin-bottom: var(--space-8);">
+          <span class="section-badge">Simple & Fast Workflow</span>
+          <h2 class="section-title">How SmartScan Automates Compliance</h2>
+        </div>
+
+        <div class="workflow-steps">
+          
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <h4 class="step-title">Scan / Upload Packet</h4>
+            <p class="step-desc">Inspector or citizen captures a clear photograph of the product packaging or back label.</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <h4 class="step-title">OCR Label Reading</h4>
+            <p class="step-desc">Optical Character Recognition extracts text declarations, dates, currency, and entity names.</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <h4 class="step-title">PCR 2011 Rule Engine</h4>
+            <p class="step-desc">AI validates declarations against statutory requirements and highlights missing details.</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">4</div>
+            <h4 class="step-title">Report & State Action</h4>
+            <p class="step-desc">Generates a verified PDF inspection report and allows 1-click filing with State Officers.</p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Clean Official Footer -->
+  <footer class="footer" id="contact" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        
+        <div class="footer-brand">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.5rem;">🔍</span>
+            <h3>SmartScan &bull; Legal Metrology</h3>
+          </div>
+          <p style="font-size: 0.85rem; line-height: 1.6;">
+            Smart India Hackathon 2026 Initiative under the Ministry of Consumer Affairs, Food and Public Distribution, Government of India.
+          </p>
+          <div style="margin-top: 8px;">
+            <span class="gov-badge">SIH 2026 Finalist Project</span>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Portal Navigation</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Instant Scanner</a></li>
+            <li><a href="scan.html">Compliance Report View</a></li>
+            <li><a href="complaints.html">Lodge State Grievance</a></li>
+            <li><a href="history.html">Scanned Product Archive</a></li>
+            <li><a href="dashboard.html">Enforcement Analytics</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Statutory Acts</h4>
+          <ul class="footer-links">
+            <li><a href="https://consumeraffairs.nic.in" target="_blank" rel="noopener">Legal Metrology Act, 2009</a></li>
+            <li><a href="https://consumeraffairs.nic.in" target="_blank" rel="noopener">Packaged Commodities Rules, 2011</a></li>
+            <li><a href="https://consumerhelpline.gov.in" target="_blank" rel="noopener">National Consumer Helpline (NCH)</a></li>
+            <li><a href="https://fssai.gov.in" target="_blank" rel="noopener">FSSAI Labelling Standards</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>National Helpdesk</h4>
+          <ul class="footer-links">
+            <li><span>Toll Free: <strong>1915 / 1800-11-4000</strong></span></li>
+            <li><span>Email: <strong>consumer-care@nic.in</strong></span></li>
+            <li><span>Hours: Mon - Sat (9:30 AM - 5:30 PM)</span></li>
+            <li><span>Krishi Bhawan, New Delhi - 110001</span></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 SmartScan &bull; Ministry of Consumer Affairs, Food & Public Distribution, Govt. of India.</div>
+        <div>Compliant with Legal Metrology (Packaged Commodities) Rules, 2011</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Core JavaScript dependencies -->
+  <script src="js/ruleEngine.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/scanner.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartScan | State Legal Metrology Grievance & Enforcement Portal</title>
+  <meta name="description" content="File statutory complaints and violation notices directly with State Controllers of Legal Metrology across India.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔍</text></svg>">
+</head>
+<body>
+
+  <!-- Top Gov Bar -->
+  <header class="gov-bar">
+    <div class="container gov-bar-content">
+      <div class="gov-emblem-text">
+        <span>🏛️</span>
+        <span>Government of India &bull; <strong>Ministry of Consumer Affairs, Food & Public Distribution</strong></span>
+        <span class="gov-badge">State Enforcement Action</span>
+      </div>
+      <div class="gov-bar-links">
+        <a href="index.html">← Back to Scanner</a>
+        <a href="#recent-complaints">Recent Filings</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M3 7V5a2 2 0 0 1 2-2h2"/>
+            <path d="M17 3h2a2 2 0 0 1 2 2v2"/>
+            <path d="M21 17v2a2 2 0 0 1-2 2h-2"/>
+            <path d="M7 21H5a2 2 0 0 1-2-2v-2"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+        </div>
+        <div class="brand-title">
+          <div class="brand-name">Smart<span>Scan</span></div>
+          <div class="brand-subtitle">State Grievance Portal</div>
+        </div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home (Scan)</a></li>
+        <li><a href="scan.html" class="nav-link">Inspection Report</a></li>
+        <li><a href="complaints.html" class="nav-link active">State Complaints Portal</a></li>
+        <li><a href="history.html" class="nav-link">Product Repository</a></li>
+        <li><a href="dashboard.html" class="nav-link">Enforcement Dashboard</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="index.html" class="btn btn-outline btn-sm">Scan New Label</a>
+      </div>
+    </div>
+  </nav>
+
+  <main style="padding: var(--space-10) 0 var(--space-16);">
+    <div class="container container-narrow">
+      
+      <!-- Page Header -->
+      <div style="text-align: center; margin-bottom: var(--space-8);">
+        <span class="badge badge-non-compliant" style="margin-bottom: var(--space-2);">Statutory Enforcement Action</span>
+        <h1 style="font-size: 2.2rem; color: var(--color-primary-dark); font-weight: 800;">
+          Lodge Complaint with State Legal Metrology Controller
+        </h1>
+        <p style="color: var(--text-secondary); max-width: 650px; margin: 0 auto;">
+          Violations identified under the Legal Metrology (Packaged Commodities) Rules, 2011 are routed directly 
+          to the designated Assistant Controller / Inspector of the relevant State Government for spot inspection.
+        </p>
+      </div>
+
+      <!-- Complaint Form Card -->
+      <div class="complaint-card">
+        <form id="complaintForm">
+          
+          <div class="form-group">
+            <label class="form-label" for="stateSelect">
+              Select Jurisdictional State / Union Territory <span class="req">*</span>
+            </label>
+            <select class="form-control" id="stateSelect" required>
+              <option value="Karnataka">Karnataka (Controller: Ali Asker Road, Bengaluru)</option>
+              <option value="Maharashtra">Maharashtra (Controller: Free Church Compound, Mumbai)</option>
+              <option value="Delhi">Delhi (Controller: Vikas Bhawan, New Delhi)</option>
+              <option value="Tamil Nadu">Tamil Nadu (Controller: DMS Campus, Chennai)</option>
+              <option value="Uttar Pradesh">Uttar Pradesh (Controller: Rana Pratap Marg, Lucknow)</option>
+              <option value="Gujarat">Gujarat (Controller: Sector-10B, Gandhinagar)</option>
+              <option value="West Bengal">West Bengal (Controller: Ganesh Chandra Ave, Kolkata)</option>
+              <option value="Telangana">Telangana (Controller: PWD Building, Hyderabad)</option>
+            </select>
+          </div>
+
+          <!-- Dynamic Office Info Box -->
+          <div id="stateOfficeInfo" style="margin-bottom: var(--space-5);"></div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="productName">Product / Commodity Name <span class="req">*</span></label>
+              <input type="text" class="form-control" id="productName" placeholder="e.g. Everest Shahi Garam Masala" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="brandName">Manufacturer / Brand Name <span class="req">*</span></label>
+              <input type="text" class="form-control" id="brandName" placeholder="e.g. Everest Food Products Pvt Ltd" required>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="storeName">Retail Shop / Platform Where Purchased <span class="req">*</span></label>
+              <input type="text" class="form-control" id="storeName" placeholder="e.g. Supermarket, Indiranagar or E-comm site" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="districtName">District / Locality</label>
+              <input type="text" class="form-control" id="districtName" placeholder="e.g. Bengaluru Urban">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="scanReferenceId">SmartScan Inspection Reference ID</label>
+            <input type="text" class="form-control" id="scanReferenceId" placeholder="LM-INSP-XXXXXX" readonly style="background: #F8FAFC; font-family: monospace;">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="violationsSummary">
+              Detected PCR, 2011 Violations & Specific Rule Breaches <span class="req">*</span>
+            </label>
+            <textarea class="form-control" id="violationsSummary" rows="4" placeholder="Rule 6(1)(f) Consumer Care Helpline absent&#10;Rule 6(1)(e) Unit sale price omitted alongside MRP" required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Attached Photographic Evidence</label>
+            <div style="padding: 10px 14px; background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: 6px; font-size: 0.85rem; color: #475569; display: flex; align-items: center; justify-content: space-between;">
+              <span>📸 Scanned label photo attached from SmartScan</span>
+              <span class="badge badge-compliant">VERIFIED EVIDENCE</span>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top: var(--space-4);">
+            <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.85rem; cursor: pointer; color: var(--text-secondary);">
+              <input type="checkbox" required style="margin-top: 3px;">
+              <span>I hereby certify under the Legal Metrology Act, 2009 that the information and photographic evidence submitted are accurate to the best of my knowledge for official enforcement investigation.</span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-accent btn-lg btn-block" style="margin-top: var(--space-5);">
+            <span>Transmitting to State Controller & Generate Notice Code</span>
+            <span>→</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Recent State Complaints Table -->
+      <div id="recent-complaints" style="margin-top: var(--space-12);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+          <div>
+            <h2 style="font-size: 1.3rem; font-weight: 800; color: var(--color-primary-dark);">Recent Transmitted Complaints</h2>
+            <p style="font-size: 0.825rem; color: var(--text-muted);">Real-time status updates from State Legal Metrology enforcement wings</p>
+          </div>
+        </div>
+
+        <div class="repo-table-wrapper">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Tracking ID</th>
+                <th>Commodity</th>
+                <th>State</th>
+                <th>Statutory Violations</th>
+                <th>Current Status</th>
+                <th>Date Filed</th>
+              </tr>
+            </thead>
+            <tbody id="recentComplaintsTableBody">
+              <!-- Rendered by complaints.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Success Modal -->
+  <div id="successModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); z-index: 999; align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: white; border-radius: 16px; padding: 32px; max-width: 520px; width: 100%; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); text-align: center;">
+      <div style="width: 64px; height: 64px; border-radius: 50%; background: #E8F5E9; color: #0A8754; font-size: 2rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+        ✓
+      </div>
+      <h2 style="font-size: 1.5rem; font-weight: 800; color: #0F2D59; margin-bottom: 8px;">Grievance Transmitted to State Controller</h2>
+      <p style="font-size: 0.9rem; color: #64748B; margin-bottom: 20px;">
+        Your complaint has been formally logged and assigned to the jurisdictional Legal Metrology Inspector.
+      </p>
+
+      <div style="background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 8px; padding: 14px; margin-bottom: 20px;">
+        <div style="font-size: 0.75rem; text-transform: uppercase; color: #64748B; font-weight: 700; margin-bottom: 4px;">Official Enforcement Tracking ID</div>
+        <div style="font-size: 1.35rem; font-weight: 800; font-family: monospace; color: #0F2D59;" id="modalTrackingId">LM-COMP-2026-KA-9912</div>
+      </div>
+
+      <div style="display: flex; gap: 10px;">
+        <button class="btn btn-outline btn-block" onclick="document.getElementById('successModal').style.display='none'; window.location.reload();">
+          Close
+        </button>
+        <a href="dashboard.html" class="btn btn-primary btn-block">
+          View Dashboard
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <div>SmartScan &bull; Ministry of Consumer Affairs, Food & Public Distribution</div>
+        <div>Complaints monitored under Legal Metrology Act, 2009</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/ruleEngine.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/complaints.js"></script>
+
+</body>
+</html>
