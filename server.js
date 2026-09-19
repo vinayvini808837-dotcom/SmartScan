@@ -2,7 +2,8 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 3000;
+const PORT = parseInt(process.env.PORT, 10) || 3000;
+const BACKEND_PORT = 5000;
 const PUBLIC_DIR = path.join(__dirname, 'frontend');
 
 const MIME_TYPES = {
@@ -28,6 +29,35 @@ function createServer() {
     try {
       const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
       let pathname = decodeURIComponent(parsedUrl.pathname);
+
+      // PROXY ALL /api/* REQUESTS TO EXPRESS BACKEND ON PORT 5000
+      if (pathname.startsWith('/api')) {
+        const proxyReq = http.request({
+          hostname: '127.0.0.1',
+          port: BACKEND_PORT,
+          path: req.url,
+          method: req.method,
+          headers: {
+            ...req.headers,
+            host: `127.0.0.1:${BACKEND_PORT}`
+          }
+        }, (proxyRes) => {
+          res.writeHead(proxyRes.statusCode, proxyRes.headers);
+          proxyRes.pipe(res);
+        });
+
+        proxyReq.on('error', (err) => {
+          console.warn(`[Proxy Warning] Could not reach backend on port ${BACKEND_PORT}: ${err.message}`);
+          res.writeHead(502, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({
+            success: false,
+            message: `Backend proxy error: Ensure backend is running on port ${BACKEND_PORT}.`
+          }));
+        });
+
+        req.pipe(proxyReq);
+        return;
+      }
 
       if (pathname === '/') {
         pathname = '/index.html';
@@ -57,7 +87,7 @@ function createServer() {
 <body style="font-family:sans-serif;text-align:center;padding:50px;">
   <h2>404 - Resource Not Found</h2>
   <p>The requested file <code>${pathname}</code> does not exist.</p>
-  <p><a href="/" style="color:#0056b3;">Return to SmartScan Home</a></p>
+  <p><a href="/" style="color:#004F9F;">Return to ComplyScan Home</a></p>
 </body>
 </html>`);
           return;
@@ -96,11 +126,11 @@ function startServer(port) {
 
   server.listen(port, () => {
     console.log(`\n======================================================`);
-    console.log(`🚀 SmartScan Web Application Server`);
-    console.log(`   Running at:  http://localhost:${port}`);
-    console.log(`   Serving dir: ${PUBLIC_DIR}`);
+    console.log(`🚀 ComplyScan Full-Stack Dev Server`);
+    console.log(`   Frontend:   http://localhost:${port}`);
+    console.log(`   API Proxy:  http://localhost:${port}/api -> :${BACKEND_PORT}`);
     console.log(`======================================================\n`);
   });
 }
 
-startServer(DEFAULT_PORT);
+startServer(PORT);

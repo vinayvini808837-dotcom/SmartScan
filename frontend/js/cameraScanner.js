@@ -156,6 +156,20 @@ const CameraScanner = (function () {
     }, 250);
   }
 
+  // Resilient API Fetch Helper (Works on :3000 proxy, :5000 native, and external origins)
+  async function fetchFromApi(path, options = {}) {
+    try {
+      const res = await fetch(path, options);
+      if (res.ok || res.status === 404 || res.status === 400) {
+        return await res.json();
+      }
+    } catch (e) {
+      console.warn('Relative fetch failed, trying http://localhost:5000 fallback:', e.message);
+    }
+    const fallbackRes = await fetch(`http://localhost:5000${path}`, options);
+    return await fallbackRes.json();
+  }
+
   // Called when a barcode is scanned or clicked from quick rack
   async function handleBarcodeFound(barcode) {
     if (!barcode) return;
@@ -168,19 +182,29 @@ const CameraScanner = (function () {
       setTimeout(() => reticle.classList.remove('detected'), 800);
     }
 
+    const resultContainer = document.getElementById('scannedProductResult');
+    if (resultContainer) {
+      resultContainer.style.display = 'block';
+      resultContainer.innerHTML = `
+        <div style="background: white; border-radius: 12px; padding: 24px; text-align: center; border: 1px solid #E2E8F0;">
+          <div style="font-size: 1.6rem; margin-bottom: 8px;">⏳</div>
+          <div style="font-weight: 700; color: #0F2D59;">Querying National Database for Barcode: <code>${barcode}</code>...</div>
+          <div style="font-size: 0.85rem; color: #64748B; margin-top: 4px;">Connecting to Node.js & Express REST API</div>
+        </div>
+      `;
+    }
+
     // Lookup product in REST API
     try {
-      const response = await fetch(`${API_BASE}/api/products/barcode/${encodeURIComponent(barcode)}`);
-      const result = await response.json();
+      const result = await fetchFromApi(`/api/products/barcode/${encodeURIComponent(barcode)}`);
 
-      if (result.success && result.data) {
+      if (result && result.success && result.data) {
         displayScannedProduct(result.data);
       } else {
         showBarcodeNotFound(barcode);
       }
     } catch (err) {
       console.error('API lookup error:', err);
-      // Fallback offline product
       showBarcodeNotFound(barcode);
     }
   }
@@ -190,15 +214,49 @@ const CameraScanner = (function () {
     const resultContainer = document.getElementById('scannedProductResult');
     if (!resultContainer) return;
 
+    // Synchronize with active scan session for scan.html
+    if (window.SmartScanApp) {
+      const scanPayload = {
+        inspectionId: 'INSP-' + (product.barcode || '').slice(-6),
+        barcode: product.barcode,
+        productName: product.name,
+        brand: product.brand,
+        category: product.category,
+        mrp: `₹${product.mrp.toFixed(2)}`,
+        netQty: product.netQuantity,
+        mfgDate: product.mfgDate || '08/2026',
+        batchNumber: product.batchNumber || 'B1',
+        countryOfOrigin: product.countryOfOrigin || 'India',
+        manufacturer: product.manufacturer || product.brand,
+        consumerCare: product.consumerCare || '1800-425-4449 or care@pack.in',
+        isCompliant: product.isCompliant !== false,
+        complianceScore: product.complianceScore || (product.isCompliant !== false ? 100 : 65),
+        violationsCount: product.violationsCount || (product.violations ? product.violations.length : 0),
+        violations: product.violations || [],
+        scanTimestamp: new Date().toLocaleString('en-IN'),
+        ocrText: `
+${product.name.toUpperCase()}
+Barcode: ${product.barcode}
+Net Qty: ${product.netQuantity}
+Mfg Date: ${product.mfgDate || '08/2026'}  Batch: ${product.batchNumber || 'B1'}
+MRP: ₹${product.mrp.toFixed(2)} (Incl. of all taxes)
+Manufactured by: ${product.manufacturer || product.brand}
+Consumer Care: ${product.consumerCare || '1800-425-4449 or care@pack.in'}
+Country of Origin: ${product.countryOfOrigin || 'India'}
+        `.trim()
+      };
+      window.SmartScanApp.setActiveScan(scanPayload);
+    }
+
     const complianceBadge = product.isCompliant
       ? `<span class="badge badge-success">✓ PCR 2011 Compliant (${product.complianceScore || 100}%)</span>`
-      : `<span class="badge badge-danger">⚠ Non-Compliant (${product.violationsCount || 1} Violations)</span>`;
+      : `<span class="badge badge-danger">⚠ Non-Compliant (${product.violationsCount || (product.violations ? product.violations.length : 1)} Violations)</span>`;
 
     resultContainer.innerHTML = `
       <div class="product-card-scanned">
         <div class="product-card-header">
           <div>
-            <span class="barcode-pill">Barcode: <strong>${product.barcode}</strong></span>
+            <span class="barcode-pill">Barcode: <strong>${product.barcode}</strong> &bull; <span style="color: #059669;">● Backend Fetched</span></span>
             <h3 class="product-title">${product.name}</h3>
             <p class="product-brand">${product.brand} &bull; <span class="product-cat">${product.category}</span></p>
           </div>

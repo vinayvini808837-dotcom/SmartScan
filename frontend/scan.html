@@ -81,6 +81,16 @@
         </div>
       </div>
 
+      <!-- Live Backend Lookup Bar -->
+      <div class="backend-lookup-bar" style="display: flex; gap: 10px; align-items: center; margin-bottom: 24px; background: #FFFFFF; padding: 12px 18px; border-radius: 10px; border: 1px solid #E2E8F0; box-shadow: 0 2px 8px rgba(15, 45, 89, 0.05); flex-wrap: wrap;">
+        <span style="font-size: 0.9rem; font-weight: 700; color: #0F2D59;">🔍 Live Backend Lookup:</span>
+        <input type="text" id="scanPageBarcodeInput" class="form-control" placeholder="Enter barcode (e.g. 8901030895412)" style="max-width: 280px; font-family: monospace; font-size: 0.95rem;">
+        <button class="btn btn-primary btn-sm" id="btnFetchFromBackend" onclick="fetchBarcodeOnScanPage()">
+          Fetch from Backend API
+        </button>
+        <span id="backendStatusPill" class="badge badge-success" style="margin-left: auto;">● Backend Connected</span>
+      </div>
+
       <!-- Split Layout: Left Label Preview & OCR / Right Verification Matrix -->
       <div class="analysis-grid">
         
@@ -196,58 +206,91 @@
   <script src="js/app.js"></script>
   <script src="js/reportGenerator.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Retrieve active scan from session or fall back to most recent inspection
-      let scanData = window.SmartScanApp.getActiveScan();
+    // Resilient API Fetch Helper
+    async function fetchFromApi(path, options = {}) {
+      try {
+        const res = await fetch(path, options);
+        if (res.ok || res.status === 404 || res.status === 400) {
+          return await res.json();
+        }
+      } catch (e) {
+        console.warn('Relative fetch failed, trying http://localhost:5000 fallback:', e.message);
+      }
+      const fallbackRes = await fetch(`http://localhost:5000${path}`, options);
+      return await fallbackRes.json();
+    }
 
-      if (!scanData) {
-        const inspections = window.SmartScanApp.getInspections();
-        if (inspections && inspections.length > 0) {
-          const latest = inspections[0];
-          // Re-evaluate
-          scanData = {
-            inspectionId: latest.id,
-            productName: latest.productName,
-            brand: latest.brand,
-            category: latest.category,
-            storeName: latest.storeName,
-            state: latest.state,
-            image: latest.image,
-            ocrText: `
-${latest.productName}
-Net Qty: ${latest.netQty || '200 g'}
-Mfg Date: ${latest.mfgDate || '08/2026'}
-MRP: ${latest.mrp || '₹40.00 (incl. of all taxes)'}
-Packed by: ${latest.brand}, Industrial Estate
-Consumer Care: 1800-200-1122, support@consumer.in
-Country of Origin: India
-            `.trim()
-          };
-          const evalResult = window.LegalMetrologyEngine.evaluateCompliance(scanData.ocrText);
-          scanData = { ...scanData, ...evalResult };
+    // Check backend connection
+    async function checkBackendHealth() {
+      const pill = document.getElementById('backendStatusPill');
+      try {
+        const health = await fetchFromApi('/api/health');
+        if (health && health.status === 'ONLINE') {
+          if (pill) {
+            pill.textContent = `● Backend Connected (${health.database.productsLoaded} products)`;
+            pill.className = 'badge badge-success';
+          }
+        }
+      } catch (e) {
+        if (pill) {
+          pill.textContent = '⚠ Backend Offline (Check port 5000)';
+          pill.className = 'badge badge-danger';
         }
       }
+    }
 
-      if (!scanData) {
-        alert('No scan data available. Please scan a product first.');
-        window.location.href = 'index.html';
-        return;
-      }
+    function transformBackendProductToScan(p) {
+      const ocrText = `
+${p.name.toUpperCase()}
+Barcode: ${p.barcode}
+Net Qty: ${p.netQuantity}
+Mfg Date: ${p.mfgDate || '08/2026'}  Batch: ${p.batchNumber || 'B1'}
+MRP: ₹${(p.mrp || 50).toFixed(2)} (Incl. of all taxes)
+Manufactured by: ${p.manufacturer || p.brand}
+Consumer Care: ${p.consumerCare || '1800-425-4449 or care@pack.in'}
+Country of Origin: ${p.countryOfOrigin || 'India'}
+      `.trim();
+
+      const evaluation = window.LegalMetrologyEngine.evaluateCompliance(ocrText);
+
+      return {
+        inspectionId: 'INSP-' + (p.barcode || '').slice(-6),
+        barcode: p.barcode,
+        productName: p.name,
+        brand: p.brand,
+        category: p.category,
+        storeName: 'National Inspection Repository',
+        state: 'Karnataka',
+        image: p.image,
+        mrp: `₹${(p.mrp || 50).toFixed(2)}`,
+        netQty: p.netQuantity,
+        mfgDate: p.mfgDate || '08/2026',
+        countryOfOrigin: p.countryOfOrigin || 'India',
+        ocrText: ocrText,
+        isCompliant: p.isCompliant !== false,
+        complianceScore: p.complianceScore || 100,
+        violationsCount: p.violationsCount || (p.violations ? p.violations.length : 0),
+        violations: p.violations || [],
+        ...evaluation
+      };
+    }
+
+    function renderInspection(scanData) {
+      if (!scanData) return;
 
       // Populate Top Meta
-      document.getElementById('badgeInspectionId').textContent = scanData.inspectionId;
+      document.getElementById('badgeInspectionId').textContent = scanData.inspectionId || 'LM-INSP-2026';
       document.getElementById('textInspectionDate').textContent = `Inspection Date: ${scanData.scanTimestamp || new Date().toLocaleDateString('en-IN')}`;
       document.getElementById('headingProductName').textContent = scanData.productName;
       document.getElementById('previewStoreName').textContent = scanData.storeName || 'Field Retail Sample';
       document.getElementById('previewState').textContent = scanData.state || 'Karnataka';
       document.getElementById('rawOcrTextDisplay').textContent = scanData.ocrText || 'No text extracted.';
 
-      // Sample image generator or provided image
+      // Image or High fidelity SVG
       const imgElem = document.getElementById('scannedImagePreview');
       if (scanData.image && scanData.image.startsWith('data:image')) {
         imgElem.src = scanData.image;
       } else {
-        // High fidelity SVG packet representation
         imgElem.src = generatePacketSvg(scanData);
       }
 
@@ -270,11 +313,11 @@ Country of Origin: India
         verdictBanner.className = 'verdict-banner non-compliant';
         verdictIcon.textContent = '⚠️';
         verdictHeading.textContent = 'NON-COMPLIANT PACKAGED COMMODITY';
-        verdictDesc.textContent = `${scanData.violationsCount} mandatory declarations violated under PCR, 2011. Notice recommended.`;
+        verdictDesc.textContent = `${scanData.violationsCount || 1} mandatory declarations violated under PCR, 2011. Notice recommended.`;
         badgeViolations.className = 'badge badge-non-compliant';
-        badgeViolations.textContent = `${scanData.violationsCount} Violations Detected`;
+        badgeViolations.textContent = `${scanData.violationsCount || 1} Violations Detected`;
       }
-      verdictScore.textContent = `${scanData.complianceScore}%`;
+      verdictScore.textContent = `${scanData.complianceScore || 100}%`;
 
       // Render Checklist
       const listContainer = document.getElementById('rulesListContainer');
@@ -306,12 +349,80 @@ Country of Origin: India
 
       // Render Official Legal Report
       window.ReportGenerator.renderReport(scanData, 'officialReportContainer');
+    }
 
-      // Copy OCR handler
-      document.getElementById('btnCopyOcr').addEventListener('click', () => {
-        navigator.clipboard.writeText(scanData.ocrText || '');
-        window.SmartScanApp.showToast('Raw OCR text copied to clipboard!', 'success');
-      });
+    // Live barcode fetcher triggered from button or input
+    async function fetchBarcodeOnScanPage(barcodeInput) {
+      const input = document.getElementById('scanPageBarcodeInput');
+      const barcode = barcodeInput || (input ? input.value.trim() : '');
+      if (!barcode) {
+        alert('Please enter a barcode to fetch from the backend.');
+        return;
+      }
+
+      const btn = document.getElementById('btnFetchFromBackend');
+      if (btn) btn.textContent = 'Fetching...';
+
+      try {
+        const result = await fetchFromApi(`/api/products/barcode/${encodeURIComponent(barcode)}`);
+        if (result && result.success && result.data) {
+          const scan = transformBackendProductToScan(result.data);
+          window.SmartScanApp.setActiveScan(scan);
+          renderInspection(scan);
+          if (input) input.value = barcode;
+          window.SmartScanApp.showToast(`Fetched "${result.data.name}" from Backend!`, 'success');
+        } else {
+          alert(`No product found in backend database with barcode: ${barcode}`);
+        }
+      } catch (err) {
+        alert('Could not connect to backend REST API. Ensure server is running.');
+      } finally {
+        if (btn) btn.textContent = 'Fetch from Backend API';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      checkBackendHealth();
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const barcodeParam = urlParams.get('barcode');
+
+      if (barcodeParam) {
+        const input = document.getElementById('scanPageBarcodeInput');
+        if (input) input.value = barcodeParam;
+        await fetchBarcodeOnScanPage(barcodeParam);
+        return;
+      }
+
+      // Check active scan
+      let scanData = window.SmartScanApp.getActiveScan();
+
+      if (!scanData) {
+        // Fetch default seed product from backend
+        try {
+          const prodList = await fetchFromApi('/api/products');
+          if (prodList && prodList.success && prodList.data && prodList.data.length > 0) {
+            scanData = transformBackendProductToScan(prodList.data[0]);
+            window.SmartScanApp.setActiveScan(scanData);
+          }
+        } catch (e) {
+          console.warn('Could not load default product from backend:', e);
+        }
+      }
+
+      if (scanData) {
+        renderInspection(scanData);
+      }
+
+      // Copy OCR text handler
+      const copyBtn = document.getElementById('btnCopyOcr');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', () => {
+          const text = document.getElementById('rawOcrTextDisplay').textContent;
+          navigator.clipboard.writeText(text);
+          window.SmartScanApp.showToast('Raw OCR text copied to clipboard!', 'success');
+        });
+      }
     });
 
     function escapeHtml(text) {
