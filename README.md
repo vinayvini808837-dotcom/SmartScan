@@ -1,6 +1,6 @@
 # SmartScan 🔍
 
-Smart India Hackathon 2026 Project
+Automated Legal Metrology Compliance & Packaging Inspection System
 
 ## 📌 Project Overview
 SmartScan is an intelligent solution designed to automate scanning, analysis, and decision-making workflows.

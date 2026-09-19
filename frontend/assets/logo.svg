@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 480" width="500" height="480" fill="none">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="phoneBodyGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#003366"/>
+      <stop offset="100%" stop-color="#001F3F"/>
+    </linearGradient>
+    <linearGradient id="shieldGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00D06C"/>
+      <stop offset="100%" stop-color="#009640"/>
+    </linearGradient>
+    <linearGradient id="boxFrontGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1A73E8"/>
+      <stop offset="100%" stop-color="#0D47A1"/>
+    </linearGradient>
+    <linearGradient id="boxTopGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#4285F4"/>
+      <stop offset="100%" stop-color="#64B5F6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Group: Top Graphic Device & Shield -->
+  <g transform="translate(40, 10)">
+    <!-- Background Checklist Document (Right) -->
+    <g transform="translate(195, 60)">
+      <rect x="0" y="0" width="130" height="155" rx="16" fill="#002D62" stroke="#004694" stroke-width="6"/>
+      <!-- Checklist items -->
+      <path d="M22 36 L32 46 L50 24" fill="none" stroke="#00C853" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="62" y1="36" x2="108" y2="36" stroke="#0D47A1" stroke-width="7" stroke-linecap="round"/>
+      
+      <path d="M22 76 L32 86 L50 64" fill="none" stroke="#00C853" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="62" y1="76" x2="108" y2="76" stroke="#0D47A1" stroke-width="7" stroke-linecap="round"/>
+      
+      <path d="M22 116 L32 126 L50 104" fill="none" stroke="#00C853" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="62" y1="116" x2="108" y2="116" stroke="#0D47A1" stroke-width="7" stroke-linecap="round"/>
+    </g>
+
+    <!-- Smartphone Body (Center-Left) -->
+    <rect x="70" y="10" width="170" height="270" rx="34" fill="url(#phoneBodyGrad)" stroke="#003875" stroke-width="4"/>
+    
+    <!-- Phone Screen Area -->
+    <rect x="82" y="38" width="146" height="200" rx="12" fill="#03162B"/>
+    
+    <!-- Phone Speaker notch & Camera -->
+    <rect x="135" y="20" width="40" height="5" rx="2.5" fill="#0D3560"/>
+    <circle cx="155" cy="256" r="10" fill="#07203E"/>
+
+    <!-- Green Viewfinder Scanner Corners inside Screen -->
+    <!-- Top-Left -->
+    <path d="M96 66 L96 52 A 4 4 0 0 1 100 48 L114 48" fill="none" stroke="#00E676" stroke-width="7" stroke-linecap="round"/>
+    <!-- Top-Right -->
+    <path d="M196 48 L210 48 A 4 4 0 0 1 214 52 L214 66" fill="none" stroke="#00E676" stroke-width="7" stroke-linecap="round"/>
+    <!-- Bottom-Left -->
+    <path d="M96 174 L96 188 A 4 4 0 0 0 100 192 L114 192" fill="none" stroke="#00E676" stroke-width="7" stroke-linecap="round"/>
+    <!-- Bottom-Right -->
+    <path d="M196 192 L210 192 A 4 4 0 0 0 214 188 L214 174" fill="none" stroke="#00E676" stroke-width="7" stroke-linecap="round"/>
+
+    <!-- 3D Blue Packaged Commodity (Carton Box) -->
+    <g transform="translate(105, 68)">
+      <!-- Left shaded side -->
+      <polygon points="0,45 28,20 28,115 0,95" fill="#0D47A1"/>
+      <!-- Top roof fold -->
+      <polygon points="28,20 75,12 98,32 52,45" fill="url(#boxTopGrad)"/>
+      <polygon points="0,45 28,20 52,45 25,60" fill="#1E88E5"/>
+      <!-- Front main face -->
+      <polygon points="25,60 52,45 98,32 98,115 28,115" fill="url(#boxFrontGrad)"/>
+      
+      <!-- Nutrition / Barcode Label on Box -->
+      <rect x="42" y="62" width="46" height="42" rx="4" fill="#FFFFFF"/>
+      <line x1="48" y1="70" x2="80" y2="70" stroke="#0D47A1" stroke-width="2.5"/>
+      <line x1="48" y1="76" x2="74" y2="76" stroke="#0D47A1" stroke-width="2.5"/>
+      <!-- Barcode stripes -->
+      <line x1="48" y1="84" x2="48" y2="98" stroke="#0A192F" stroke-width="2"/>
+      <line x1="52" y1="84" x2="52" y2="98" stroke="#0A192F" stroke-width="3"/>
+      <line x1="57" y1="84" x2="57" y2="98" stroke="#0A192F" stroke-width="1.5"/>
+      <line x1="61" y1="84" x2="61" y2="98" stroke="#0A192F" stroke-width="2.5"/>
+      <line x1="66" y1="84" x2="66" y2="98" stroke="#0A192F" stroke-width="1.5"/>
+      <line x1="70" y1="84" x2="70" y2="98" stroke="#0A192F" stroke-width="3"/>
+      <line x1="75" y1="84" x2="75" y2="98" stroke="#0A192F" stroke-width="2"/>
+      <line x1="79" y1="84" x2="79" y2="98" stroke="#0A192F" stroke-width="1.5"/>
+    </g>
+
+    <!-- Green Security Compliance Shield (Foreground) -->
+    <g transform="translate(180, 150)">
+      <path d="M45 0 C72 12 85 24 88 55 C88 95 55 125 45 135 C35 125 2 95 2 55 C5 24 18 12 45 0 Z" 
+            fill="url(#shieldGrad)" stroke="#003319" stroke-width="5"/>
+      <!-- Dark Blue Checkmark inside Shield -->
+      <path d="M26 66 L39 80 L65 48" fill="none" stroke="#002D62" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </g>
+
+  <!-- Typography: ComplyScan -->
+  <g transform="translate(250, 390)">
+    <text text-anchor="middle" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-size="64" font-weight="900" letter-spacing="-1">
+      <tspan fill="#004F9F">Comply</tspan><tspan fill="#00A859">Scan</tspan>
+    </text>
+    <text y="38" text-anchor="middle" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" fill="#1E4B8A" letter-spacing="2">
+      AI-POWERED PACKAGED COMMODITY
+    </text>
+    <text y="58" text-anchor="middle" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#4285F4" letter-spacing="1">
+      COMPLIANCE SYSTEM
+    </text>
+  </g>
+</svg>

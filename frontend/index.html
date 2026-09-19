@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SmartScan | Legal Metrology Automated Compliance & Violation Reporting System</title>
+  <title>ComplyScan | AI-Powered Legal Metrology Compliance System</title>
   <meta name="description" content="AI-powered Legal Metrology (Packaged Commodities) Rules 2011 compliance verification, OCR label extraction, and State Enforcement Officer complaint reporting system.">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/components.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔍</text></svg>">
+  <link rel="icon" href="assets/logo.png">
 </head>
 <body>
 
@@ -31,19 +31,10 @@
   <nav class="navbar" role="navigation" aria-label="Main Navigation">
     <div class="container nav-container">
       <a href="index.html" class="brand-logo" id="brandLogoLink">
-        <div class="brand-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 7V5a2 2 0 0 1 2-2h2"/>
-            <path d="M17 3h2a2 2 0 0 1 2 2v2"/>
-            <path d="M21 17v2a2 2 0 0 1-2 2h-2"/>
-            <path d="M7 21H5a2 2 0 0 1-2-2v-2"/>
-            <circle cx="12" cy="12" r="3"/>
-            <path d="m16 16 3 3"/>
-          </svg>
-        </div>
+        <img src="assets/logo.png" alt="ComplyScan Logo" class="brand-logo-img">
         <div class="brand-title">
-          <div class="brand-name">Smart<span>Scan</span></div>
-          <div class="brand-subtitle">Legal Metrology Compliance</div>
+          <div class="brand-name"><span class="brand-comply">Comply</span><span class="brand-scan">Scan</span></div>
+          <div class="brand-subtitle">Compliance System</div>
         </div>
       </a>
 
@@ -56,6 +47,11 @@
       </ul>
 
       <div class="nav-actions">
+        <button class="btn btn-outline btn-sm" id="navCartBtn" onclick="SmartScanCart.openDrawer()" style="display: flex; align-items: center; gap: 6px;">
+          <span>🛒</span>
+          <span>Cart</span>
+          <span class="cart-count-badge" style="display:none;">0</span>
+        </button>
         <a href="complaints.html" class="btn btn-accent btn-sm" id="navLodgeComplaintBtn">
           <span>Lodge State Grievance</span>
           <span>→</span>
@@ -73,7 +69,7 @@
         <div class="hero-content">
           <div class="hero-pill">
             <span class="hero-pill-icon"></span>
-            <span>SIH 2026 &bull; Automated Packaged Commodities Verification</span>
+            <span>Legal Metrology Division &bull; Automated Packaged Commodities Verification</span>
           </div>
 
           <h1 class="hero-title">
@@ -95,61 +91,156 @@
           </div>
         </div>
 
-        <!-- Right: The Hero Scanner Widget -->
+        <!-- Right: The Hero Multi-Mode Scanner Widget -->
         <div class="scanner-widget" id="scannerWidgetCard">
           
           <div class="scanner-widget-header">
             <div class="scanner-widget-title">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <rect width="18" height="18" x="3" y="3" rx="2"/>
-                <path d="M7 7h.01"/>
-                <path d="M17 7h.01"/>
-                <path d="M7 17h.01"/>
-                <path d="M17 17h.01"/>
+                <path d="M3 7V5a2 2 0 0 1 2-2h2"/>
+                <path d="M17 3h2a2 2 0 0 1 2 2v2"/>
+                <path d="M21 17v2a2 2 0 0 1-2 2h-2"/>
+                <path d="M7 21H5a2 2 0 0 1-2-2v-2"/>
+                <line x1="7" y1="12" x2="17" y2="12"/>
               </svg>
-              <span>Instant Label Scanner</span>
+              <span>SmartScan Real-Time Scanner</span>
             </div>
-            <span class="badge badge-info">Live OCR & AI</span>
+            <span class="badge badge-info" id="cameraStatusBadge">Scanner Ready</span>
           </div>
 
-          <!-- Drag and Drop Dropzone -->
-          <div class="dropzone" id="scannerDropzone" role="button" tabindex="0" aria-label="Upload package label image">
-            <input type="file" id="productImageInput" class="dropzone-input" accept="image/*">
-            
-            <div class="dropzone-icon">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="17 8 12 3 7 8"/>
-                <line x1="12" y1="3" x2="12" y2="15"/>
-              </svg>
-            </div>
+          <!-- Scanner Mode Tabs Navigation -->
+          <div class="scanner-tabs-nav">
+            <button class="scanner-tab-btn active" data-target="tab-camera">
+              <span>📷 Camera Live Barcode</span>
+            </button>
+            <button class="scanner-tab-btn" data-target="tab-barcode-search">
+              <span>🏷️ Barcode Lookup</span>
+            </button>
+            <button class="scanner-tab-btn" data-target="tab-ocr">
+              <span>🖼️ Image-To-Text OCR</span>
+            </button>
 
-            <div class="dropzone-title">Drop Product Label Image Here</div>
-            <div class="dropzone-subtitle">or click to browse from device (JPG, PNG, WebP)</div>
           </div>
 
-          <!-- Quick Demo Sample Packets (1-Click Evaluation for Hackathon Presentation) -->
-          <div class="demo-samples-wrapper">
-            <div class="demo-samples-label">
-              <span>⚡ Try Pre-loaded Hackathon Test Samples:</span>
-            </div>
-            <div class="sample-pills">
-              <button class="sample-pill-btn" data-sample-id="sample_compliant" id="btnSampleCompliant" title="Valid Biscuit packet meeting all 7 rules">
-                <span class="sample-dot compliant"></span>
-                <span>🍪 Britannia Biscuit (Compliant)</span>
-              </button>
-              
-              <button class="sample-pill-btn" data-sample-id="sample_missing_care" id="btnSampleMissingCare" title="Masala packet missing consumer care email and phone number">
-                <span class="sample-dot non-compliant"></span>
-                <span>🌶️ Masala (Missing Consumer Care)</span>
-              </button>
+          <!-- TAB 1: Live Camera Barcode Scanner -->
+          <div class="scanner-tab-panel active" id="tab-camera">
+            <div class="camera-viewfinder-container">
+              <!-- Placeholder when camera is off -->
+              <div class="camera-placeholder" id="cameraPlaceholder">
+                <div class="placeholder-icon">📷</div>
+                <h4>Device Camera Scanner</h4>
+                <p>Point your smartphone or webcam at any retail commodity barcode (EAN-13 / UPC / Code 128).</p>
+                <button class="btn btn-primary btn-sm" id="btnStartCamera">
+                  Start Live Camera Scanner
+                </button>
+              </div>
 
-              <button class="sample-pill-btn" data-sample-id="sample_imported" id="btnSampleImported" title="Imported chocolate missing Country of Origin and INR price">
-                <span class="sample-dot non-compliant"></span>
-                <span>🍫 Imported (Missing Origin & INR)</span>
+              <!-- Live Video Element -->
+              <video id="scannerVideo" playsinline muted style="display:none; width: 100%; height: 100%; object-fit: cover;"></video>
+
+              <!-- Viewfinder Overlay & Reticle -->
+              <div class="viewfinder-overlay">
+                <div class="viewfinder-reticle">
+                  <div class="reticle-corner tl"></div>
+                  <div class="reticle-corner tr"></div>
+                  <div class="reticle-corner bl"></div>
+                  <div class="reticle-corner br"></div>
+                  <div class="reticle-scan-line"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="camera-controls-bar">
+              <button class="btn btn-danger btn-sm" id="btnStopCamera" style="display:none;">
+                ■ Stop Camera
               </button>
+              <div class="camera-tip">Tip: Hold barcode flat and steadily within the reticle box.</div>
             </div>
           </div>
+
+          <!-- TAB 2: Barcode Lookup & Instant Test Rack -->
+          <div class="scanner-tab-panel" id="tab-barcode-search">
+            <div style="padding: 16px 0;">
+              <label style="font-size: 0.85rem; font-weight: 700; color: #1E293B; margin-bottom: 6px; display: block;">
+                Enter or Paste Commodity Barcode (EAN-13 / UPC):
+              </label>
+              <div style="display: flex; gap: 8px;">
+                <input type="text" id="manualBarcodeInput" class="form-control" placeholder="e.g. 8901030895412" style="font-family: monospace; font-size: 1.05rem; font-weight: 600;">
+                <button class="btn btn-primary" id="btnLookupBarcode">Search Barcode</button>
+              </div>
+
+              <div class="quick-barcode-rack">
+                <div style="font-size: 0.8rem; font-weight: 700; color: #64748B; margin: 14px 0 8px;">
+                  ⚡ Quick-Test Common Indian Packaged Commodities (Click to simulate scan):
+                </div>
+                <div class="barcode-chips-grid">
+                  <button class="barcode-chip" data-test-barcode="8901030895412">
+                    <span class="chip-code">8901030895412</span>
+                    <span class="chip-name">🍪 Britannia Good Day</span>
+                  </button>
+                  <button class="barcode-chip" data-test-barcode="8901499026416">
+                    <span class="chip-code">8901499026416</span>
+                    <span class="chip-name">🌶️ Everest Garam Masala (Violations)</span>
+                  </button>
+                  <button class="barcode-chip" data-test-barcode="8901058852312">
+                    <span class="chip-code">8901058852312</span>
+                    <span class="chip-name">🍜 Maggi 2-Minute Noodles</span>
+                  </button>
+                  <button class="barcode-chip" data-test-barcode="8901030383124">
+                    <span class="chip-code">8901030383124</span>
+                    <span class="chip-name">🧂 Tata Salt 1kg</span>
+                  </button>
+                  <button class="barcode-chip" data-test-barcode="8901314010521">
+                    <span class="chip-code">8901314010521</span>
+                    <span class="chip-name">🪥 Colgate MaxFresh</span>
+                  </button>
+                  <button class="barcode-chip" data-test-barcode="8901262010041">
+                    <span class="chip-code">8901262010041</span>
+                    <span class="chip-name">🧈 Amul Pure Ghee 1L</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 3: Image-to-Text OCR Conversion -->
+          <div class="scanner-tab-panel" id="tab-ocr">
+            <div class="dropzone" id="ocrDropzone" role="button" tabindex="0">
+              <input type="file" id="ocrImageFileInput" class="dropzone-input" accept="image/*">
+              <div class="dropzone-icon">📄</div>
+              <div class="dropzone-title">Upload Packet Label for Image-To-Text OCR</div>
+              <div class="dropzone-subtitle">Convert label photo into digital text & verify legal declarations</div>
+            </div>
+
+            <!-- OCR Progress Bar -->
+            <div id="ocrStatusProgress" style="display:none; margin-top: 14px; padding: 12px; background: #F8FAFC; border-radius: 8px; border: 1px solid #E2E8F0;">
+              <div id="ocrStatusText" style="font-size: 0.85rem; font-weight: 600; color: #1E4B8A; margin-bottom: 6px;">Initializing OCR...</div>
+              <div style="background: #E2E8F0; height: 8px; border-radius: 4px; overflow: hidden;">
+                <div id="ocrProgressBar" style="width: 20%; height: 100%; background: #004F9F; transition: width 0.3s ease;"></div>
+              </div>
+            </div>
+
+            <!-- OCR Results Panel -->
+            <div id="ocrResultsContainer" style="display:none; margin-top: 16px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <h4 style="margin:0; font-size: 1rem; color: #0F2D59;">Extracted Digital Text & Declarations</h4>
+                <span id="ocrComplianceBadge" class="badge badge-success">✓ Verified</span>
+              </div>
+              <img id="ocrPreviewImage" style="max-height: 120px; border-radius: 6px; margin-bottom: 10px; display:none; object-fit: contain;">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div>
+                  <label style="font-size: 0.75rem; font-weight: 700; color: #64748B;">Raw Label Text (OCR Output):</label>
+                  <textarea id="ocrRawTextOutput" readonly rows="7" style="width:100%; font-family: monospace; font-size: 0.8rem; padding: 8px; border: 1px solid #CBD5E1; border-radius: 6px; background: #F8FAFC; resize: none;"></textarea>
+                </div>
+                <div>
+                  <label style="font-size: 0.75rem; font-weight: 700; color: #64748B;">Detected Statutory Declarations:</label>
+                  <div id="ocrEntitiesOutput" style="font-size: 0.8rem; background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 6px; padding: 8px; height: 135px; overflow-y: auto;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
 
           <!-- Active Scanning Overlay with Laser Beam Animation -->
           <div class="scanning-overlay" id="scanningOverlay">
@@ -168,6 +259,9 @@
           </div>
 
         </div>
+
+        <!-- Scanned Product Live Result Card (Appears directly below scanner upon scan) -->
+        <div id="scannedProductResult" style="display: none; grid-column: 1 / -1; margin-top: 24px;"></div>
 
       </div>
     </section>
@@ -258,7 +352,7 @@
         
         <div class="section-header" style="margin-bottom: var(--space-8);">
           <span class="section-badge">Simple & Fast Workflow</span>
-          <h2 class="section-title">How SmartScan Automates Compliance</h2>
+          <h2 class="section-title">How ComplyScan Automates Compliance</h2>
         </div>
 
         <div class="workflow-steps">
@@ -301,14 +395,14 @@
         
         <div class="footer-brand">
           <div style="display: flex; align-items: center; gap: 10px;">
-            <span style="font-size: 1.5rem;">🔍</span>
-            <h3>SmartScan &bull; Legal Metrology</h3>
+            <img src="assets/logo.png" alt="ComplyScan Logo" style="height: 38px; width: auto; border-radius: 4px;">
+            <h3 style="color: white;"><span style="color: #60A5FA;">Comply</span><span style="color: #34D399;">Scan</span> &bull; Legal Metrology</h3>
           </div>
           <p style="font-size: 0.85rem; line-height: 1.6;">
-            Smart India Hackathon 2026 Initiative under the Ministry of Consumer Affairs, Food and Public Distribution, Government of India.
+            National Initiative under the Ministry of Consumer Affairs, Food and Public Distribution, Government of India.
           </p>
           <div style="margin-top: 8px;">
-            <span class="gov-badge">SIH 2026 Finalist Project</span>
+            <span class="gov-badge">National Compliance Portal</span>
           </div>
         </div>
 
@@ -346,15 +440,128 @@
       </div>
 
       <div class="footer-bottom">
-        <div>&copy; 2026 SmartScan &bull; Ministry of Consumer Affairs, Food & Public Distribution, Govt. of India.</div>
+        <div>&copy; 2026 ComplyScan &bull; Ministry of Consumer Affairs, Food & Public Distribution, Govt. of India.</div>
         <div>Compliant with Legal Metrology (Packaged Commodities) Rules, 2011</div>
       </div>
     </div>
   </footer>
 
+  <!-- Floating Cart Action Button -->
+  <button class="floating-cart-fab" id="floatingCartBtn" title="View Shopping & Inspection Cart" aria-label="Open Cart">
+    <span>🛒</span>
+    <span class="cart-count-badge" style="display:none;">0</span>
+  </button>
+
+  <!-- Cart Sliding Drawer & Backdrop -->
+  <div class="cart-drawer-backdrop" id="cartBackdrop"></div>
+  <aside class="cart-drawer" id="cartDrawer" role="dialog" aria-labelledby="cartDrawerTitle">
+    <div class="cart-drawer-header">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 1.4rem;">🛒</span>
+        <h3 id="cartDrawerTitle" style="margin: 0; font-size: 1.2rem; color: #0F2D59;">Scanned Products Cart</h3>
+      </div>
+      <button class="cart-drawer-close" id="btnCartDrawerClose" aria-label="Close Cart">&times;</button>
+    </div>
+
+    <div class="cart-drawer-body">
+      <!-- Empty state -->
+      <div class="cart-empty-state" id="cartDrawerEmptyState">
+        <div style="font-size: 3rem; margin-bottom: 12px;">🛍️</div>
+        <h4>Your Cart is Empty</h4>
+        <p style="color: #64748B; font-size: 0.9rem;">Scan any packet barcode or search our verified catalog to add commodities.</p>
+        <button class="btn btn-sm btn-outline" onclick="SmartScanCart.closeDrawer(); CameraScanner.switchTab('tab-camera');" style="margin-top: 10px;">
+          Open Barcode Scanner
+        </button>
+      </div>
+
+      <!-- Item cards -->
+      <div class="cart-items-list" id="cartDrawerItemsList"></div>
+    </div>
+
+    <div class="cart-drawer-footer">
+      <div class="cart-summary-line">
+        <span>Subtotal:</span>
+        <span id="cartDrawerSubtotal">₹0.00</span>
+      </div>
+      <div class="cart-summary-line">
+        <span>GST (5% FMCG / Foods):</span>
+        <span id="cartDrawerTax">₹0.00</span>
+      </div>
+      <div class="cart-summary-line cart-total-line">
+        <span>Total Payable:</span>
+        <strong id="cartDrawerTotal">₹0.00</strong>
+      </div>
+
+      <div class="cart-footer-actions">
+        <button class="btn btn-outline btn-sm" id="btnCartClear">Clear Cart</button>
+        <button class="btn btn-primary" id="btnCartCheckout" disabled>
+          Proceed to Checkout →
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Checkout Modal -->
+  <div class="modal-backdrop" id="checkoutModal">
+    <div class="modal-card checkout-modal-card">
+      <div class="modal-header">
+        <h3 style="margin:0; font-size: 1.25rem; color: #0F2D59;">⚡ SmartScan Express Checkout</h3>
+        <button class="modal-close-btn" onclick="SmartScanCart.closeModal('checkoutModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="checkoutOrderSummary"></div>
+
+        <form id="checkoutForm" onsubmit="event.preventDefault();" style="margin-top: 16px;">
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label style="font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 4px; display: block;">
+              Consumer / Officer Name:
+            </label>
+            <input type="text" id="checkoutNameInput" class="form-control" value="Retail Self-Checkout User" required>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label style="font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 4px; display: block;">
+              Mobile Number:
+            </label>
+            <input type="tel" id="checkoutPhoneInput" class="form-control" value="+91 98765 43210" required>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 18px;">
+            <label style="font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 4px; display: block;">
+              Payment / Verification Method:
+            </label>
+            <select id="checkoutPaymentMethod" class="form-control">
+              <option value="UPI / Instant Pay">UPI (Google Pay, PhonePe, Paytm)</option>
+              <option value="Debit / Credit Card">Debit / Credit Card</option>
+              <option value="Cash at Counter">Cash on Counter / Self-Checkout</option>
+              <option value="Official Enforcement Seizure">Official Enforcement Seizure (Dept Copy)</option>
+            </select>
+          </div>
+
+          <div style="display: flex; gap: 10px; justify-content: flex-end;">
+            <button type="button" class="btn btn-outline" onclick="SmartScanCart.closeModal('checkoutModal')">Cancel</button>
+            <button type="button" class="btn btn-accent" id="btnConfirmOrder">
+              Confirm & Place Order →
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order Success Confirmation Modal -->
+  <div class="modal-backdrop" id="orderSuccessModal">
+    <div class="modal-card order-success-modal-card">
+      <div class="modal-body" id="orderSuccessContent"></div>
+    </div>
+  </div>
+
   <!-- Core JavaScript dependencies -->
   <script src="js/ruleEngine.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/cameraScanner.js"></script>
+  <script src="js/ocrEngine.js"></script>
+  <script src="js/cart.js"></script>
   <script src="js/scanner.js"></script>
 
 </body>

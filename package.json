@@ -1,0 +1,19 @@
+{
+  "name": "smartscan",
+  "version": "1.0.0",
+  "description": "SmartScan - AI-Powered Legal Metrology Compliance System",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "serve": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "smartscan",
+    "legal-metrology",
+    "compliance",
+    "ocr"
+  ],
+  "author": "",
+  "license": "ISC"
+}

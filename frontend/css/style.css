@@ -244,6 +244,19 @@ button, input, select, textarea {
   box-shadow: 0 4px 10px rgba(15, 45, 89, 0.25);
 }
 
+.brand-logo-img {
+  height: 46px;
+  width: auto;
+  max-width: 52px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 79, 159, 0.2));
+  transition: transform var(--transition-fast);
+}
+
+.brand-logo:hover .brand-logo-img {
+  transform: scale(1.05);
+}
+
 .brand-title {
   display: flex;
   flex-direction: column;
@@ -251,22 +264,28 @@ button, input, select, textarea {
 
 .brand-name {
   line-height: 1.1;
-  color: var(--color-primary);
+  font-size: 1.4rem;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 0px;
 }
 
-.brand-name span {
-  color: var(--color-accent);
+.brand-comply {
+  color: #004F9F;
+  font-weight: 800;
+}
+
+.brand-scan {
+  color: #00A859;
+  font-weight: 800;
 }
 
 .brand-subtitle {
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: var(--text-muted);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #1E4B8A;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
 }
 
 .nav-links {
