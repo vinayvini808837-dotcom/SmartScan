@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SmartScan | Legal Metrology Enforcement Officer Dashboard</title>
+  <title>ComplyScan | Legal Metrology Enforcement Officer Dashboard</title>
   <meta name="description" content="National enforcement officer analytics, compliance distribution charts, and State-wise violation monitoring.">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/components.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔍</text></svg>">
+  <link rel="icon" href="assets/logo.png">
   <style>
     .dash-metrics-grid {
       display: grid;
@@ -105,19 +105,11 @@
   <!-- Navbar -->
   <nav class="navbar">
     <div class="container nav-container">
-      <a href="index.html" class="brand-logo">
-        <div class="brand-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M3 7V5a2 2 0 0 1 2-2h2"/>
-            <path d="M17 3h2a2 2 0 0 1 2 2v2"/>
-            <path d="M21 17v2a2 2 0 0 1-2 2h-2"/>
-            <path d="M7 21H5a2 2 0 0 1-2-2v-2"/>
-            <circle cx="12" cy="12" r="3"/>
-          </svg>
-        </div>
+      <a href="index.html" class="brand-logo" id="brandLogoLink">
+        <img src="assets/logo.png" alt="ComplyScan Logo" class="brand-logo-img">
         <div class="brand-title">
-          <div class="brand-name">Smart<span>Scan</span></div>
-          <div class="brand-subtitle">Enforcement Dashboard</div>
+          <div class="brand-name"><span class="brand-comply">Comply</span><span class="brand-scan">Scan</span></div>
+          <div class="brand-subtitle">Compliance System</div>
         </div>
       </a>
 
@@ -362,7 +354,7 @@
   <footer class="footer">
     <div class="container">
       <div class="footer-bottom">
-        <div>SmartScan &bull; Legal Metrology Surveillance Console &bull; Ministry of Consumer Affairs, Govt. of India</div>
+        <div>ComplyScan &bull; Legal Metrology Surveillance Console &bull; Ministry of Consumer Affairs, Govt. of India</div>
         <div>Surveillance analytics governed by Section 52 of Legal Metrology Act, 2009</div>
       </div>
     </div>
