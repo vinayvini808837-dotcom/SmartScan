@@ -84,11 +84,24 @@
       <!-- Live Backend Lookup Bar -->
       <div class="backend-lookup-bar" style="display: flex; gap: 10px; align-items: center; margin-bottom: 24px; background: #FFFFFF; padding: 12px 18px; border-radius: 10px; border: 1px solid #E2E8F0; box-shadow: 0 2px 8px rgba(15, 45, 89, 0.05); flex-wrap: wrap;">
         <span style="font-size: 0.9rem; font-weight: 700; color: #0F2D59;">🔍 Live Backend Lookup:</span>
-        <input type="text" id="scanPageBarcodeInput" class="form-control" placeholder="Enter barcode (e.g. 8901030895412)" style="max-width: 280px; font-family: monospace; font-size: 0.95rem;">
+        <input type="text" id="scanPageBarcodeInput" class="form-control" placeholder="Enter barcode (e.g. 8906073783319 DOMS)" style="max-width: 280px; font-family: monospace; font-size: 0.95rem;">
         <button class="btn btn-primary btn-sm" id="btnFetchFromBackend" onclick="fetchBarcodeOnScanPage()">
           Fetch from Backend API
         </button>
         <span id="backendStatusPill" class="badge badge-success" style="margin-left: auto;">● Backend Connected</span>
+      </div>
+
+      <!-- Statutory Violation Enforcement Notice Callout Banner -->
+      <div id="violationNoticeBanner" style="display: none; background: #FEF2F2; border-left: 5px solid #DC2626; border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(220,38,38,0.08);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <h4 style="margin: 0 0 4px; color: #991B1B; font-size: 1rem;">⚠️ Legal Metrology Statutory Violation Notice Recommended</h4>
+            <p style="margin: 0; color: #B91C1C; font-size: 0.85rem;" id="violationNoticeSummary">Mandatory declarations missing under PCR, 2011. Transmit formal notice to State Controller of Legal Metrology.</p>
+          </div>
+          <a href="complaints.html" class="btn btn-accent btn-sm" id="btnNoticeAction" style="background: #DC2626; color: white; text-decoration: none; font-weight: 700;">
+            ⚖️ File Official State Grievance →
+          </a>
+        </div>
       </div>
 
       <!-- Split Layout: Left Label Preview & OCR / Right Verification Matrix -->
@@ -201,6 +214,9 @@
     </div>
   </footer>
 
+  <!-- Production Barcode Decoding Engine -->
+  <script src="https://unpkg.com/@zxing/library@latest/umd/index.min.js"></script>
+
   <!-- Scripts -->
   <script src="js/ruleEngine.js"></script>
   <script src="js/app.js"></script>
@@ -243,9 +259,10 @@
       const ocrText = `
 ${p.name.toUpperCase()}
 Barcode: ${p.barcode}
-Net Qty: ${p.netQuantity}
+Net Quantity: ${p.netQuantity}
 Mfg Date: ${p.mfgDate || '08/2026'}  Batch: ${p.batchNumber || 'B1'}
 MRP: ₹${(p.mrp || 50).toFixed(2)} (Incl. of all taxes)
+${p.unitPrice ? 'Unit Sale Price: ' + p.unitPrice : ''}
 Manufactured by: ${p.manufacturer || p.brand}
 Consumer Care: ${p.consumerCare || '1800-425-4449 or care@pack.in'}
 Country of Origin: ${p.countryOfOrigin || 'India'}
@@ -260,17 +277,17 @@ Country of Origin: ${p.countryOfOrigin || 'India'}
         brand: p.brand,
         category: p.category,
         storeName: 'National Inspection Repository',
-        state: 'Karnataka',
+        state: p.state || 'Gujarat',
         image: p.image,
         mrp: `₹${(p.mrp || 50).toFixed(2)}`,
         netQty: p.netQuantity,
         mfgDate: p.mfgDate || '08/2026',
         countryOfOrigin: p.countryOfOrigin || 'India',
         ocrText: ocrText,
-        isCompliant: p.isCompliant !== false,
-        complianceScore: p.complianceScore || 100,
-        violationsCount: p.violationsCount || (p.violations ? p.violations.length : 0),
-        violations: p.violations || [],
+        isCompliant: p.isCompliant !== false && (!evaluation.violationsCount || evaluation.violationsCount === 0),
+        complianceScore: p.complianceScore || evaluation.complianceScore || 100,
+        violationsCount: p.violationsCount || evaluation.violationsCount || 0,
+        violations: p.violations && p.violations.length > 0 ? p.violations : evaluation.violations,
         ...evaluation
       };
     }
@@ -283,7 +300,7 @@ Country of Origin: ${p.countryOfOrigin || 'India'}
       document.getElementById('textInspectionDate').textContent = `Inspection Date: ${scanData.scanTimestamp || new Date().toLocaleDateString('en-IN')}`;
       document.getElementById('headingProductName').textContent = scanData.productName;
       document.getElementById('previewStoreName').textContent = scanData.storeName || 'Field Retail Sample';
-      document.getElementById('previewState').textContent = scanData.state || 'Karnataka';
+      document.getElementById('previewState').textContent = scanData.state || 'Gujarat';
       document.getElementById('rawOcrTextDisplay').textContent = scanData.ocrText || 'No text extracted.';
 
       // Image or High fidelity SVG
@@ -294,13 +311,15 @@ Country of Origin: ${p.countryOfOrigin || 'India'}
         imgElem.src = generatePacketSvg(scanData);
       }
 
-      // Populate Verdict Banner
+      // Populate Verdict Banner & Violation Notice
       const verdictBanner = document.getElementById('verdictBanner');
       const verdictIcon = document.getElementById('verdictIcon');
       const verdictHeading = document.getElementById('verdictHeading');
       const verdictDesc = document.getElementById('verdictDescription');
       const verdictScore = document.getElementById('verdictScore');
       const badgeViolations = document.getElementById('badgeTotalViolations');
+      const violationNoticeBanner = document.getElementById('violationNoticeBanner');
+      const violationNoticeSummary = document.getElementById('violationNoticeSummary');
 
       if (scanData.isCompliant) {
         verdictBanner.className = 'verdict-banner compliant';
@@ -309,13 +328,22 @@ Country of Origin: ${p.countryOfOrigin || 'India'}
         verdictDesc.textContent = 'All statutory mandatory declarations were verified and meet legal standards.';
         badgeViolations.className = 'badge badge-compliant';
         badgeViolations.textContent = '0 Violations (Fully Compliant)';
+        if (violationNoticeBanner) violationNoticeBanner.style.display = 'none';
       } else {
         verdictBanner.className = 'verdict-banner non-compliant';
         verdictIcon.textContent = '⚠️';
         verdictHeading.textContent = 'NON-COMPLIANT PACKAGED COMMODITY';
-        verdictDesc.textContent = `${scanData.violationsCount || 1} mandatory declarations violated under PCR, 2011. Notice recommended.`;
+        verdictDesc.textContent = `${scanData.violationsCount || 1} mandatory declaration(s) violated under PCR, 2011. Transmit notice to ${scanData.state || 'State'} Controller.`;
         badgeViolations.className = 'badge badge-non-compliant';
-        badgeViolations.textContent = `${scanData.violationsCount || 1} Violations Detected`;
+        badgeViolations.textContent = `${scanData.violationsCount || 1} Violation(s) Detected`;
+
+        if (violationNoticeBanner) {
+          violationNoticeBanner.style.display = 'block';
+          if (violationNoticeSummary) {
+            const vList = (scanData.violations || []).map(v => typeof v === 'string' ? v : (v.ruleCode + ': ' + v.ruleName)).join(', ');
+            violationNoticeSummary.textContent = `Violations Observed: ${vList || 'Statutory declaration defect under Rule 6'}. Click right to transmit formal statutory complaint to the ${scanData.state || 'State'} Controller of Legal Metrology.`;
+          }
+        }
       }
       verdictScore.textContent = `${scanData.complianceScore || 100}%`;
 

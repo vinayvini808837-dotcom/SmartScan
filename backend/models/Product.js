@@ -162,23 +162,31 @@ const ProductService = {
 
   async seedIfEmpty(seedList) {
     if (isMongoDBConnected()) {
-      const count = await ProductModel.countDocuments();
-      if (count === 0) {
-        console.log('🌱 Seeding MongoDB with initial product catalog...');
-        await ProductModel.insertMany(seedList);
-        console.log(`✅ Seeded ${seedList.length} products to MongoDB.`);
+      for (const item of seedList) {
+        const exists = await ProductModel.findOne({ barcode: item.barcode });
+        if (!exists) {
+          await ProductModel.create(item);
+        }
       }
+      console.log(`✅ Seed catalog synchronized with MongoDB (${seedList.length} total seeds).`);
     } else {
-      if (fallbackStore.products.length === 0) {
-        console.log('🌱 Seeding fallback store with initial product catalog...');
-        fallbackStore.products = seedList.map((item, idx) => ({
-          ...item,
-          _id: 'seed_' + (idx + 1),
-          id: 'seed_' + (idx + 1),
-          createdAt: new Date()
-        }));
+      if (!fallbackStore.products) fallbackStore.products = [];
+      let added = 0;
+      for (const item of seedList) {
+        const exists = fallbackStore.products.some(p => p.barcode === item.barcode);
+        if (!exists) {
+          fallbackStore.products.push({
+            ...item,
+            _id: 'seed_' + (fallbackStore.products.length + 1),
+            id: 'seed_' + (fallbackStore.products.length + 1),
+            createdAt: new Date()
+          });
+          added++;
+        }
+      }
+      if (added > 0) {
         persistData();
-        console.log(`✅ Seeded ${seedList.length} products to fallback store.`);
+        console.log(`✅ Synchronized ${added} new products into fallback store (Total: ${fallbackStore.products.length}).`);
       }
     }
   }

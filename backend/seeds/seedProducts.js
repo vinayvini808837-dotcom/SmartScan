@@ -169,6 +169,53 @@ const SEED_PRODUCTS = [
     violations: [],
     image: 'https://images.unsplash.com/photo-1607006314646-4b8c08fc0485?w=400&q=80',
     stock: 150
+  },
+  {
+    barcode: '8906073783319',
+    name: 'DOMS 360° Self-Centering Compass',
+    brand: 'DOMS Industries Limited',
+    category: 'Stationery & Mathematical Instruments',
+    mrp: 20.00,
+    unitPrice: '₹20.00 Per Number',
+    netQuantity: '1 Number',
+    mfgDate: '02/2026',
+    expiryDate: 'N/A (Stationery)',
+    batchNumber: 'ART NO. 8331',
+    manufacturer: 'DOMS Industries Limited, J-19, G.I.D.C., Umbergaon-396171, Dist. Valsad, Gujarat, India',
+    countryOfOrigin: 'India',
+    consumerCare: '1-800-2741250 or info@domsindia.com',
+    state: 'Gujarat',
+    isCompliant: true,
+    complianceScore: 100,
+    violationsCount: 0,
+    violations: [],
+    image: 'https://images.unsplash.com/photo-1588072432836-e10032774350?w=400&q=80',
+    stock: 200
+  },
+  {
+    barcode: '8906073783326',
+    name: 'DOMS Mathematical Compass Box (Defective Sample)',
+    brand: 'DOMS Industries Limited',
+    category: 'Stationery & Mathematical Instruments',
+    mrp: 85.00,
+    unitPrice: 'Missing Unit Sale Price',
+    netQuantity: '1 Kit',
+    mfgDate: '01/2026',
+    expiryDate: 'N/A (Stationery)',
+    batchNumber: 'ART NO. 8399',
+    manufacturer: 'DOMS Industries Limited, Umbergaon-396171, Gujarat',
+    countryOfOrigin: 'India',
+    consumerCare: 'Missing Consumer Care Cell Details',
+    state: 'Gujarat',
+    isCompliant: false,
+    complianceScore: 58,
+    violationsCount: 2,
+    violations: [
+      'Missing Mandatory Consumer Care Cell Helpline/Email (Rule 6(1)(f))',
+      'Missing Unit Sale Price per piece/unit (Rule 6(1)(e))'
+    ],
+    image: 'https://images.unsplash.com/photo-1588072432836-e10032774350?w=400&q=80',
+    stock: 35
   }
 ];
 

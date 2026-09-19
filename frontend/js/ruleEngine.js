@@ -20,7 +20,7 @@ const LegalMetrologyEngine = (function () {
         // Look for MRP, Rs, ₹, incl of all taxes
         const mrpRegex = /(?:M\.?R\.?P\.?|MAX(?:IMUM)?\.?\s*RETAIL\s*PRICE|MRP\s*[:\s₹Rs]|PRICE\s*[:\s₹Rs])\s*(?:Rs\.?|₹|INR)?\s*([0-9]+(?:\.[0-9]{1,2})?)/i;
         const inclTaxRegex = /(?:incl\.?\s*(?:of)?\s*all\s*taxes|inclusive\s*of\s*all\s*taxes|incl\.\s*tax)/i;
-        const unitSaleRegex = /(?:(?:Rs\.?|₹)\s*[0-9]+(?:\.[0-9]{1,2})?\s*\/(?:g|kg|ml|l|unit|piece|gm))/i;
+        const unitSaleRegex = /(?:(?:Rs\.?|₹)?\s*[0-9]+(?:\.[0-9]{1,2})?\s*(?:\/|per)\s*(?:g|kg|ml|l|unit|piece|number|item|gm|n\b)|unit\s*sale\s*price|unit\s*price)/i;
 
         const match = text.match(mrpRegex);
         const hasTaxes = inclTaxRegex.test(text);
@@ -62,12 +62,12 @@ const LegalMetrologyEngine = (function () {
       id: 'rule_net_qty',
       ruleCode: 'Rule 6(1)(c)',
       ruleName: 'Net Quantity in Standard Units',
-      description: 'Must state net weight/volume using standard SI units (g, kg, ml, l, or number of units "N").',
+      description: 'Must state net weight/volume using standard SI units (g, kg, ml, l) or standard count/number ("Number", "N", "Unit", "Piece") under Rule 13 & Rule 6(1)(c).',
       penalty: 'Rule 32 & Sec 36 of LM Act: Seizure of goods & penalty for non-standard units.',
       validate: function (text) {
-        // Standard metric units regex
-        const netQtyRegex = /(?:NET\s*(?:QTY|QUANTITY|WT|WEIGHT|CONTENTS?)|Net\s*Wt\.?)\s*[:\s]?\s*([0-9]+(?:\.[0-9]+)?)\s*(kg|g|gm|gms|ml|l|ltr|litres?|grams?|kilograms?|units?|N\b)/i;
-        const simpleQtyRegex = /\b([0-9]+(?:\.[0-9]+)?)\s*(?:g|gm|kg|ml|l|ltr)\b/i;
+        // Standard metric units & count units regex (Supports 1 Number, 1 N, 1 Unit, 200 g, etc.)
+        const netQtyRegex = /(?:NET\s*(?:QTY|QUANTITY|WT|WEIGHT|CONTENTS?)|Net\s*Wt\.?)\s*[:\s]?\s*([0-9]+(?:\.[0-9]+)?)\s*(kg|g|gm|gms|ml|l|ltr|litres?|grams?|kilograms?|units?|n\b|numbers?|no\.?|pieces?|pcs?|items?|u\b|count)/i;
+        const simpleQtyRegex = /\b([0-9]+(?:\.[0-9]+)?)\s*(?:g|gm|kg|ml|l|ltr|number|numbers|units?|pieces?)\b/i;
 
         const match = text.match(netQtyRegex);
         if (match) {
@@ -75,7 +75,7 @@ const LegalMetrologyEngine = (function () {
             passed: true,
             detectedText: match[0],
             confidence: 0.96,
-            remarks: 'Standard net quantity declaration confirmed.'
+            remarks: 'Standard net quantity declaration confirmed under Rule 6(1)(c) & Rule 13.'
           };
         }
 
@@ -85,7 +85,7 @@ const LegalMetrologyEngine = (function () {
             passed: true,
             detectedText: simpleMatch[0],
             confidence: 0.82,
-            remarks: 'Net quantity unit detected without full "Net Wt." prefix.'
+            remarks: 'Net quantity unit detected.'
           };
         }
 

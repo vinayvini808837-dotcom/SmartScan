@@ -24,3 +24,8 @@ backend/data/*
 Thumbs.db
 .vscode/
 .idea/
+
+# OCR models and scratch
+*.traineddata
+backend/*.traineddata
+scratch/
