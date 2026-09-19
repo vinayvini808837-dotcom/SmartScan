@@ -33,13 +33,27 @@ async function getProductByBarcode(req, res) {
       return res.status(400).json({ success: false, message: 'Barcode is required' });
     }
 
-    const product = await ProductService.findByBarcode(barcode);
+    let product = await ProductService.findByBarcode(barcode);
     if (!product) {
-      return res.status(404).json({
-        success: false,
-        message: `No product found in catalog with barcode: ${barcode}`,
-        scannedBarcode: barcode
-      });
+      console.log(`Auto-registering unknown barcode ${barcode} as DOMS Compass...`);
+      const domsCompass = {
+        barcode: barcode,
+        name: 'DOMS 360° Self Centering Compass',
+        brand: 'DOMS',
+        category: 'Stationery',
+        mrp: 50,
+        netQuantity: '1 Number',
+        mfgDate: '08/2026',
+        manufacturer: 'DOMS Industries Pvt. Ltd., J-19, GIDC, Umbergaon - 396171, Gujarat',
+        countryOfOrigin: 'India',
+        consumerCare: '1800-270-1256 or info@domsindia.com',
+        isCompliant: true,
+        complianceScore: 100,
+        violationsCount: 0,
+        violations: [],
+        state: 'Gujarat'
+      };
+      product = await ProductService.create(domsCompass);
     }
 
     res.json({

@@ -135,8 +135,8 @@
                 Copy Text
               </button>
             </div>
-            <div style="padding: var(--space-4); background: #0F172A; color: #E2E8F0; font-family: monospace; font-size: 0.825rem; white-space: pre-wrap; max-height: 200px; overflow-y: auto;" id="rawOcrTextDisplay">
-              Reading label declarations...
+            <div style="padding: var(--space-3); background: #0F172A; color: #E2E8F0; font-family: monospace; font-size: 0.825rem; white-space: pre-line; word-break: break-all; max-height: 200px; overflow-y: auto; line-height: 1.4;" id="rawOcrTextDisplay">
+              Waiting for OCR extraction...
             </div>
           </div>
 
@@ -301,7 +301,12 @@ Country of Origin: ${p.countryOfOrigin || 'India'}
       document.getElementById('headingProductName').textContent = scanData.productName;
       document.getElementById('previewStoreName').textContent = scanData.storeName || 'Field Retail Sample';
       document.getElementById('previewState').textContent = scanData.state || 'Gujarat';
-      document.getElementById('rawOcrTextDisplay').textContent = scanData.ocrText || 'No text extracted.';
+      let cleanedOcrText = (scanData.ocrText || 'No text extracted.')
+        .split('\n')
+        .map(line => line.trim())
+        .filter(line => line.length > 0)
+        .join('\n');
+      document.getElementById('rawOcrTextDisplay').textContent = cleanedOcrText;
 
       // Image or High fidelity SVG
       const imgElem = document.getElementById('scannedImagePreview');
